@@ -1,47 +1,32 @@
 package ru.vsu.cs.newsstand.core.domain;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
-public class Book extends PrintedMatter{
+public class Book extends PrintedMatter {
 
+    @Getter
     private String author;
+    @Getter
     private String publishingHouse;
+    @Getter
     private Integer numberOfPage;
 
-    public Book(String name, BigDecimal price, String author, String publishingHouse, Integer numberOfPage) {
-        super(name, price, PrintedMatterType.BOOK);
+    public Book(Long id, String name, BigDecimal price, String author, String publishingHouse, Integer numberOfPage) {
+        super(id, name, price, PrintedMatterType.BOOK);
         this.author = author;
         this.publishingHouse = publishingHouse;
         this.numberOfPage = numberOfPage;
+    }
+
+    public Book(String name, BigDecimal price, String author, String publishingHouse, Integer numberOfPage) {
+        this(null, name, price, author, publishingHouse, numberOfPage);
     }
 
     @Override
     public PrintedMatter copy() {
         return new Book(name, price, author, publishingHouse, numberOfPage);
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getPublishingHouse() {
-        return publishingHouse;
-    }
-
-    public void setPublishingHouse(String publishingHouse) {
-        this.publishingHouse = publishingHouse;
-    }
-
-    public Integer getNumberOfPage() {
-        return numberOfPage;
-    }
-
-    public void setNumberOfPage(Integer numberOfPage) {
-        this.numberOfPage = numberOfPage;
     }
 
     @Override

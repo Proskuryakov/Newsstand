@@ -1,48 +1,33 @@
 package ru.vsu.cs.newsstand.core.domain;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-public class Magazine extends PrintedMatter{
+public class Magazine extends PrintedMatter {
 
+    @Getter
     private Integer number;
+    @Getter
     private Calendar date;
+    @Getter
     private Integer numberOfPage;
 
-    public Magazine(String name, BigDecimal price, Integer number, Calendar date, Integer numberOfPage) {
-        super(name, price, PrintedMatterType.MAGAZINE);
+    public Magazine(Long id, String name, BigDecimal price, Integer number, Calendar date, Integer numberOfPage) {
+        super(id, name, price, PrintedMatterType.MAGAZINE);
         this.number = number;
         this.date = date;
         this.numberOfPage = numberOfPage;
+    }
+
+    public Magazine(String name, BigDecimal price, Integer number, Calendar date, Integer numberOfPage) {
+        this(null, name, price, number, date, numberOfPage);
     }
 
     @Override
     public PrintedMatter copy() {
         return new Magazine(name, price, number, date, numberOfPage);
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public Calendar getDate() {
-        return date;
-    }
-
-    public void setDate(Calendar date) {
-        this.date = date;
-    }
-
-    public Integer getNumberOfPage() {
-        return numberOfPage;
-    }
-
-    public void setNumberOfPage(Integer numberOfPage) {
-        this.numberOfPage = numberOfPage;
     }
 
     @Override
@@ -57,7 +42,8 @@ public class Magazine extends PrintedMatter{
         sb.append("Date = ");
         sb.append(date.get(Calendar.DATE)).append(".");
         sb.append(date.get(Calendar.MONTH)).append(".");
-        sb.append(date.get(Calendar.YEAR)).append(", ");;
+        sb.append(date.get(Calendar.YEAR)).append(", ");
+        ;
         sb.append("Number of page = ").append(numberOfPage);
 
         sb.append(" }");
