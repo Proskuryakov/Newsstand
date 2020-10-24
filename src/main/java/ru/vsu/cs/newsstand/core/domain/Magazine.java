@@ -3,6 +3,7 @@ package ru.vsu.cs.newsstand.core.domain;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Magazine extends PrintedMatter {
@@ -25,6 +26,11 @@ public class Magazine extends PrintedMatter {
         this(null, name, price, number, date, numberOfPage);
     }
 
+    public String getStringDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.YYYY");
+        return dateFormat.format(date.getTime());
+    }
+
     @Override
     public PrintedMatter copy() {
         return new Magazine(name, price, number, date, numberOfPage);
@@ -40,10 +46,7 @@ public class Magazine extends PrintedMatter {
         sb.append("Price = ").append(price).append(", ");
         sb.append("№").append(number).append(", ");
         sb.append("Date = ");
-        sb.append(date.get(Calendar.DATE)).append(".");
-        sb.append(date.get(Calendar.MONTH)).append(".");
-        sb.append(date.get(Calendar.YEAR)).append(", ");
-        ;
+        sb.append(getStringDate());
         sb.append("Number of page = ").append(numberOfPage);
 
         sb.append(" }");
