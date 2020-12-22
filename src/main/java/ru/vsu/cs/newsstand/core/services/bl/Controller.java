@@ -86,4 +86,17 @@ public class Controller {
         return listToString(events);
     }
 
+    public String deletePrintedMatter(Long id) {
+        boolean res = logics.deletePrintedMatter(id);
+        if(res) {
+            return "Successfully delete";
+        }else {
+            return "Delete error";
+        }
+    }
+
+    public String updatePrintedMatter(Long id) {
+        PrintedMatter updatePrintedMatter = logics.updatePrintedMatter(id);
+        return updatePrintedMatter.toString();
+    }
 }

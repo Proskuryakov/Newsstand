@@ -19,8 +19,6 @@ import java.util.List;
 public class Logics {
 
     @InjectByType
-    private DataBase db;
-    @InjectByType
     private PrintedMatterDataServiceImp printedMatterDataService;
     @InjectByType
     private EventLogServiceImpl eventLogService;
@@ -64,5 +62,13 @@ public class Logics {
 
     public List<Event> getAllEvent() {
         return eventLogService.getAll();
+    }
+
+    public boolean deletePrintedMatter(Long id) {
+        return printedMatterDataService.delete(id);
+    }
+
+    public PrintedMatter updatePrintedMatter(Long id) {
+        return null;
     }
 }

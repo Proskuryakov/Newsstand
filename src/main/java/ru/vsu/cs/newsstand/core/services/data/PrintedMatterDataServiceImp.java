@@ -90,11 +90,14 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
         return splitAndFillList(rs, null, true);
     }
 
+    @SneakyThrows
     @Override
     public boolean delete(Long id) {
-        String sql = "delete from printed_matters where id = " + id + ";";
-        db.execute(sql);
-        return true;
+        String sql = "delete from printed_matters where id = " + id + " returning name;";
+        ResultSet rs = db.execute(sql);
+        rs.next();
+        String name = rs.getString("name");
+        return ! name.equals("");
     }
 
     @Override

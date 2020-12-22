@@ -1,10 +1,12 @@
 package ru.vsu.cs.newsstand.core.ui;
 
+import lombok.SneakyThrows;
 import ru.vsu.cs.newsstand.annotation.InjectByType;
 import ru.vsu.cs.newsstand.annotation.Singleton;
 import ru.vsu.cs.newsstand.core.services.bl.Controller;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
@@ -14,37 +16,46 @@ public class ConsoleInterface {
 
     @InjectByType
     private Controller controller;
+    private Scanner scn;
 
-    public void start(){
+    public void start() {
         println("Welcome to the newsstand");
         println("What can i do for you?");
 
-        Scanner scn = new Scanner(System.in);
+        scn = new Scanner(System.in);
 
-        loop(scn);
+        loop();
     }
 
-    private void loop(Scanner scn){
-        while (true){
+    private void loop() {
+        while (true) {
             println("Select a command:");
             println("0 - Exit");
             println("1 - View product");
             println("2 - Add a product");
             println("3 - View event log");
+            println("4 - Delete product");
+            println("5 - Update product");
 
-            int command = readCommand(scn);
+            int command = readCommand();
 
-            switch (command){
+            switch (command) {
                 case 0:
                     exit();
                 case 1:
-                    viewProduct(scn);
+                    viewProduct();
                     break;
                 case 2:
-                    addProduct(scn);
+                    addProduct();
                     break;
                 case 3:
-                    viewEventLog(scn);
+                    viewEventLog();
+                    break;
+                case 4:
+                    deleteProduct();
+                    break;
+                case 5:
+                    updateProduct();
                     break;
                 default:
                     println("Try again");
@@ -53,11 +64,11 @@ public class ConsoleInterface {
         }
     }
 
-    private void viewEventLog(Scanner scn) {
+    private void viewEventLog() {
         println(controller.getEventLog());
     }
 
-    private void addProduct(Scanner scn) {
+    private void addProduct() {
         println("Select a command:");
         println("0 - Go back to the previous menu");
         println("1 - Add newspaper(s)");
@@ -65,87 +76,126 @@ public class ConsoleInterface {
         println("3 - Add book(s)");
         print("Waiting for the command : ");
 
-        int command = readCommand(scn);
+        int command = readCommand();
 
         switch (command) {
             case 0:
                 return;
             case 1:
-                addNewspaper(scn);
+                addNewspaper();
                 break;
             case 2:
-                addMagazine(scn);
+                addMagazine();
                 break;
             case 3:
-                addBook(scn);
+                addBook();
                 break;
         }
 
     }
 
-    private void addBook(Scanner scn) {
+    private void addBook() {
         println("-_-_-_-_-_-_-_-_-_-_-_-");
         println("You want add book.");
-        println("Input <name> <price> <author> <publishingHouse> <count of page> <count>");
-        String[] args = scn.nextLine().split(" ");
-        String name = args[0];
-        BigDecimal price = new BigDecimal(args[1]);
-        String author = args[2];
-        String publishingHouse = args[3];
-        int countOfPage = Integer.parseInt(args[4]);
-        int count = Integer.parseInt(args[5]);
+
+        String name = readName();
+        BigDecimal price = readPrice();
+        String author = readAuthor();
+        String publishingHouse = readPublishingHouse();
+        int countOfPage = readCountOfPage();
+        int count = readCount();
 
         String result = controller.addBook(name, price, author, publishingHouse, countOfPage, count);
         println("You add " + result);
     }
 
-    private void addMagazine(Scanner scn) {
+    private void addMagazine() {
         println("-_-_-_-_-_-_-_-_-_-_-_-");
         println("You want add magazine.");
-        println("Input <name> <price> <№> <year> <month> <day> <count of page> <count>");
-        String[] args = scn.nextLine().split(" ");
-        String name = args[0];
-        BigDecimal price = new BigDecimal(args[1]);
-        Integer number = Integer.parseInt(args[2]);
-        int year = Integer.parseInt(args[3]);
-        int month = Integer.parseInt(args[4]);
-        int day = Integer.parseInt(args[5]);
-        int countOfPage = Integer.parseInt(args[6]);
-        int count = Integer.parseInt(args[7]);
-        Calendar calendar = new GregorianCalendar(year, month, day);
+
+        String name = readName();
+        BigDecimal price = readPrice();
+        Integer number = readNumber();
+        int countOfPage = readCountOfPage();
+        int count = readCount();
+        Calendar calendar = readDate();
 
         String result = controller.addMagazine(name, price, number, calendar, countOfPage, count);
         println("You add " + result);
     }
 
-    private void addNewspaper(Scanner scn) {
+    private void addNewspaper() {
         println("-_-_-_-_-_-_-_-_-_-_-_-");
         println("You want add newspaper.");
-        println("Input <name> <price> <№> <year> <month> <day> <count>");
-        String[] args = scn.nextLine().split(" ");
-        String name = args[0];
-        BigDecimal price = new BigDecimal(args[1]);
-        Integer number = Integer.parseInt(args[2]);
-        int year = Integer.parseInt(args[3]);
-        int month = Integer.parseInt(args[4]);
-        int day = Integer.parseInt(args[5]);
-        int count = Integer.parseInt(args[6]);
-        Calendar calendar = new GregorianCalendar(year, month, day);
+
+        String name = readName();
+        BigDecimal price = readPrice();
+        Integer number = readNumber();
+        Calendar calendar = readDate();
+        int count = readCount();
 
         String result = controller.addNewspaper(name, price, number, calendar, count);
         println("You add " + result);
     }
 
-    private void viewProduct(Scanner scn) {
+    private String readName() {
+        print("Enter name: ");
+        return scn.nextLine();
+    }
+
+    private BigDecimal readPrice() {
+        print("Enter price: ");
+        return new BigDecimal(scn.nextLine());
+    }
+
+    private int readNumber() {
+        print("Enter number: ");
+        return Integer.parseInt(scn.nextLine());
+    }
+
+    @SneakyThrows
+    private Calendar readDate() {
+        print("Enter data in format like 8.10.2018: ");
+        String strDate = scn.nextLine();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("d.M.y");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(formatter.parse(strDate));
+
+        return calendar;
+    }
+
+    private String readAuthor() {
+        print("Enter author: ");
+        return scn.nextLine();
+    }
+
+    private String readPublishingHouse() {
+        print("Enter publishing house: ");
+        return scn.nextLine();
+    }
+
+    private int readCountOfPage() {
+        print("Enter count of page: ");
+        return Integer.parseInt(scn.nextLine());
+    }
+
+    private int readCount() {
+        print("Enter count: ");
+        return Integer.parseInt(scn.nextLine());
+    }
+
+    private void viewProduct() {
         println("Select a command:");
         println("0 - Go back to the previous menu");
         println("1 - View all newspapers");
         println("2 - View all magazines");
         println("3 - View all books");
         println("4 - View all printed matters");
-        int command = readCommand(scn);
+        int command = readCommand();
 
-        switch (command){
+        switch (command) {
             case 0:
                 return;
             case 1:
@@ -165,25 +215,25 @@ public class ConsoleInterface {
         println("Want to buy something?");
         println("1 - YES");
         println("2 - NO");
-        int newCommand = readCommand(scn);
+        int newCommand = readCommand();
 
-        switch (newCommand){
+        switch (newCommand) {
             case 1:
-                buySomething(scn, command);
+                buySomething(command);
                 break;
             case 2:
                 break;
         }
     }
 
-    private void buySomething(Scanner scn, int command) {
+    private void buySomething(int command) {
         print("Enter the id of the product you want to buy : ");
         int id = Integer.parseInt(scn.nextLine());
         print("Enter the quantity of the product you want to buy : ");
         int count = Integer.parseInt(scn.nextLine());
-        switch (command){
+        switch (command) {
             case 1:
-                println(controller.buyNewspaper(id,count));
+                println(controller.buyNewspaper(id, count));
                 break;
             case 2:
                 println(controller.buyMagazine(id, count));
@@ -199,18 +249,30 @@ public class ConsoleInterface {
         System.exit(0);
     }
 
+    private void deleteProduct() {
+        println(controller.getAllPrintedMatters());
+        print("Select the id of the product to be removed: ");
+        Long id = Long.parseLong(scn.nextLine());
+        println(controller.deletePrintedMatter(id));
+    }
 
-    private void println(String message){
+    private void updateProduct() {
+        println(controller.getAllPrintedMatters());
+        print("Select the id of the product to be updated: ");
+        Long id = Long.parseLong(scn.nextLine());
+        println(controller.updatePrintedMatter(id));
+    }
+
+    private void println(String message) {
         System.out.println(message);
     }
 
-    private void print(String message){
+    private void print(String message) {
         System.out.print(message);
     }
 
-    private int readCommand(Scanner scn){
+    private int readCommand() {
         print("Waiting for the command : ");
         return Integer.parseInt(scn.nextLine());
     }
-
 }
