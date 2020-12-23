@@ -1,7 +1,6 @@
 package ru.vsu.cs.newsstand.web.servelets;
 
-import ru.vsu.cs.newsstand.core.db.PostgreDataBase;
-import ru.vsu.cs.newsstand.core.services.bl.Logics;
+import ru.vsu.cs.newsstand.core.services.Logics;
 import ru.vsu.cs.newsstand.structure.Application;
 import ru.vsu.cs.newsstand.structure.ApplicationContext;
 import ru.vsu.cs.newsstand.web.WebController;
@@ -20,9 +19,6 @@ public class StartServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-//        PostgreDataBase postgreDataBase = new PostgreDataBase();
-//        postgreDataBase.connect();
-
         ApplicationContext context = Application.run("ru.vsu.cs.newsstand", new HashMap<>());
         WebController.setLogics(context.getObject(Logics.class));
     }

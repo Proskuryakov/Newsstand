@@ -3,12 +3,10 @@ package ru.vsu.cs.newsstand.core.ui;
 import lombok.SneakyThrows;
 import ru.vsu.cs.newsstand.annotation.InjectByType;
 import ru.vsu.cs.newsstand.annotation.Singleton;
-import ru.vsu.cs.newsstand.core.services.bl.Controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 @Singleton

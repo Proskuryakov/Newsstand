@@ -1,8 +1,9 @@
-package ru.vsu.cs.newsstand.core.services.bl;
+package ru.vsu.cs.newsstand.core.ui;
 
 import ru.vsu.cs.newsstand.annotation.InjectByType;
 import ru.vsu.cs.newsstand.annotation.Singleton;
 import ru.vsu.cs.newsstand.core.domain.*;
+import ru.vsu.cs.newsstand.core.services.Logics;
 
 import java.math.BigDecimal;
 import java.util.Calendar;

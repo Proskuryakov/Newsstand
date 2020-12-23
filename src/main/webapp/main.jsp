@@ -3,36 +3,26 @@
 
 <jsp:include page="header.jsp"/>
 <jsp:include page="navbar.jsp"/>
+<c:url value="/main" var="url"/>
 
 <div uk-grid>
 
-    <div class="uk-width-3-4@m uk-padding-small uk-align-center">
+    <div class="uk-width-1-2@m uk-padding-small uk-align-center">
         <div class="uk-card uk-card-default uk-card-body uk-text-left">
 
-            <table class="uk-table uk-table-middle uk-table-small">
-                <thead>
-                <tr>
-                    <td>id</td>
-                    <td>Тип</td>
-                    <td>Название</td>
-                    <td>Цена</td>
-                </tr>
-                </thead>
+            <button
+                    class="uk-button uk-button-default uk-width-expand uk-margin"
+                    onclick="window.location.href='/add'"
+            >
+                Добавить продукцию
+            </button>
 
-                <tbody>
-                <c:forEach var="pm" items="${printedMatters}">
-                    <tr>
-
-                        <td><c:out value="${pm.id}"/></td>
-                        <td><c:out value="${pm.type}"/></td>
-                        <td><c:out value="${pm.name}"/></td>
-                        <td><c:out value="${pm.price}"/></td>
-
-                    </tr>
-                </c:forEach>
-                </tbody>
-
-            </table>
+            <button
+                    class="uk-button uk-button-default uk-width-expand uk-margin"
+                    onclick="window.location.href='/table'"
+            >
+                Посмотреть продукцию
+            </button>
 
         </div>
     </div>
@@ -40,4 +30,3 @@
 </div>
 
 <jsp:include page="footer.jsp"/>
-

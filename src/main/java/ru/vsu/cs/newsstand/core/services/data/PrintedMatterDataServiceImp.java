@@ -6,6 +6,7 @@ import ru.vsu.cs.newsstand.annotation.Singleton;
 import ru.vsu.cs.newsstand.core.dao.IPrintedMatterDataService;
 import ru.vsu.cs.newsstand.core.db.PostgreDataBase;
 import ru.vsu.cs.newsstand.core.db.domains.DataBasePrintedMatter;
+import ru.vsu.cs.newsstand.core.db.domains.SortParameter;
 import ru.vsu.cs.newsstand.core.domain.*;
 
 import java.math.BigDecimal;
@@ -21,12 +22,17 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
     private PostgreDataBase db;
 
     @Override
-    public List<PrintedMatter> getAllByType(PrintedMatterType type) {
+    public List<PrintedMatter> getAllByType(PrintedMatterType type, SortParameter sortParameter, boolean isDesc) {
+
+        String orderBy = getOrderByParameter(sortParameter, isDesc);
 
         String sql = "select * from printed_matters " +
                 "where type_id = " +
                 "(select id from printed_matter_types where name = '" +
-                type + "');";
+                type + "')";
+        if(sortParameter != SortParameter.TYPE){
+            sql += " order by " + getOrderByParameter(sortParameter, isDesc);
+        }
 
         ResultSet rs = db.execute(sql);
 
@@ -84,6 +90,30 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
                 "from printed_matters pm " +
                 "join printed_matter_types pmt " +
                 "on pmt.id = pm.type_id;";
+
+        ResultSet rs = db.execute(sql);
+
+        return splitAndFillList(rs, null, true);
+    }
+
+    @Override
+    public List<PrintedMatter> getAll(SortParameter sortParameter, boolean isDesc) {
+
+        String orderBy = getOrderByParameter(sortParameter, isDesc);
+
+        String sql = "select pm.id, " +
+                "pm.name, " +
+                "pm.price, " +
+                "pmt.name as type, " +
+                "pm.author, " +
+                "pm.publishing_house, " +
+                "pm.page_count, " +
+                "pm.publishing_date, " +
+                "pm.number " +
+                "from printed_matters pm " +
+                "join printed_matter_types pmt " +
+                "on pmt.id = pm.type_id " +
+                "order by " + orderBy;
 
         ResultSet rs = db.execute(sql);
 
@@ -213,5 +243,10 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
         return sb.toString();
     }
 
+    private String getOrderByParameter(SortParameter sortParameter, boolean isDesc){
+        String param = sortParameter.toString().toLowerCase();
+        String direction = isDesc ? "desc" : "asc";
+        return  param + " " + direction;
+    }
 
 }
