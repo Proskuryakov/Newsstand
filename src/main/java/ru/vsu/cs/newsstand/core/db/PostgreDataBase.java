@@ -23,6 +23,14 @@ public class PostgreDataBase {
     @SneakyThrows
     @PostConstruct
     public void connect() {
+
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("PostgreSQL JDBC Driver is not found. Include it in your library path ");
+            e.printStackTrace();
+        }
+
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
