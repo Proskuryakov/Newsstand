@@ -33,7 +33,6 @@ public class ConsoleInterface {
             println("2 - Add a product");
             println("3 - View event log");
             println("4 - Delete product");
-            println("5 - Update product");
 
             int command = readCommand();
 
@@ -51,9 +50,6 @@ public class ConsoleInterface {
                     break;
                 case 4:
                     deleteProduct();
-                    break;
-                case 5:
-                    updateProduct();
                     break;
                 default:
                     println("Try again");
@@ -254,12 +250,6 @@ public class ConsoleInterface {
         println(controller.deletePrintedMatter(id));
     }
 
-    private void updateProduct() {
-        println(controller.getAllPrintedMatters());
-        print("Select the id of the product to be updated: ");
-        Long id = Long.parseLong(scn.nextLine());
-        println(controller.updatePrintedMatter(id));
-    }
 
     private void println(String message) {
         System.out.println(message);

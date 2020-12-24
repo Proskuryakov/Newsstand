@@ -95,9 +95,4 @@ public class Controller {
             return "Delete error";
         }
     }
-
-    public String updatePrintedMatter(Long id) {
-        PrintedMatter updatePrintedMatter = logics.updatePrintedMatter(id);
-        return updatePrintedMatter.toString();
-    }
 }
