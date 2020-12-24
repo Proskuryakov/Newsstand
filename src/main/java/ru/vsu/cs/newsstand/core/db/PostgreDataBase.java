@@ -5,10 +5,7 @@ import lombok.SneakyThrows;
 import ru.vsu.cs.newsstand.annotation.PostConstruct;
 import ru.vsu.cs.newsstand.annotation.Singleton;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 @Singleton
 public class PostgreDataBase {
@@ -34,11 +31,14 @@ public class PostgreDataBase {
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    @SneakyThrows
     public ResultSet execute(String sql) {
-        stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        return rs;
+        try{
+            stmt = connection.createStatement();
+            return stmt.executeQuery(sql);
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
 }
