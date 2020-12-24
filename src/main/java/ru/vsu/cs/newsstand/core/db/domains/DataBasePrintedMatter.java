@@ -24,7 +24,7 @@ public class DataBasePrintedMatter {
     @Getter
     private Integer pageCount;
     @Getter
-    private Calendar publishingDate;
+    private String publishingDate;
     @Getter
     private Integer number;
 
@@ -48,13 +48,13 @@ public class DataBasePrintedMatter {
                 break;
             case MAGAZINE:
                 Magazine magazine = (Magazine) printedMatter;
-                publishingDate = magazine.getDate();
+                publishingDate = magazine.getStringDate();
                 number = magazine.getNumber();
                 pageCount = magazine.getNumberOfPage();
                 break;
             case NEWSPAPER:
                 Newspaper newspaper = (Newspaper) printedMatter;
-                publishingDate = newspaper.getDate();
+                publishingDate = newspaper.getStringDate();
                 number = newspaper.getNumber();
                 break;
         }
