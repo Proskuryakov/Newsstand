@@ -30,7 +30,7 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
                 "where type_id = " +
                 "(select id from printed_matter_types where name = '" +
                 type + "')";
-        if(sortParameter != SortParameter.TYPE){
+        if (sortParameter != SortParameter.TYPE) {
             sql += " order by " + getOrderByParameter(sortParameter, isDesc);
         }
 
@@ -127,25 +127,12 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
         ResultSet rs = db.execute(sql);
         rs.next();
         String name = rs.getString("name");
-        return ! name.equals("");
+        return !name.equals("");
     }
 
     @Override
     public PrintedMatter update(PrintedMatter printedMatter) {
-
-        DataBasePrintedMatter dbPrintedMatter = new DataBasePrintedMatter(printedMatter);
-
-        String sql = "update printed_matters" +
-                "set name = " + dbPrintedMatter.getName() +
-                "set price = " + dbPrintedMatter.getPrice() +
-                "set type_id = (select from printed_matter_types id where name = '" + printedMatter.getType() + "')" +
-                "set author = " + dbPrintedMatter.getAuthor() +
-                "set publishing_house = " + dbPrintedMatter.getPublishingHouse() +
-                "set page_count = " + dbPrintedMatter.getPageCount() +
-                "set publishing_date = " + dbPrintedMatter.getPublishingDate() +
-                "set number = " + dbPrintedMatter.getNumber() +
-                "where id = " + dbPrintedMatter.getId() + ";";
-
+        String sql = getUpdateSqlQuery(printedMatter);
         db.execute(sql);
 
         return printedMatter;
@@ -243,10 +230,39 @@ public class PrintedMatterDataServiceImp implements IPrintedMatterDataService {
         return sb.toString();
     }
 
-    private String getOrderByParameter(SortParameter sortParameter, boolean isDesc){
+    private String getUpdateSqlQuery(PrintedMatter printedMatter) {
+        DataBasePrintedMatter dbPrintedMatter = new DataBasePrintedMatter(printedMatter);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("update printed_matters set ");
+
+        sb.append("name = '").append(dbPrintedMatter.getName()).append("', ");
+        sb.append("price = '").append(dbPrintedMatter.getPrice()).append("', ");
+
+        if (dbPrintedMatter.getAuthor() != null) {
+            sb.append("author = '").append(dbPrintedMatter.getAuthor()).append("', ");
+        }
+
+        if (dbPrintedMatter.getPublishingHouse() != null) {
+            sb.append("publishing_house = '").append(dbPrintedMatter.getPublishingHouse()).append("', ");
+        }
+
+        sb.append("page_count = ").append(dbPrintedMatter.getPageCount()).append(", ");
+
+        if (dbPrintedMatter.getPublishingDate() != null) {
+            sb.append("publishing_date = '").append(dbPrintedMatter.getPublishingDate()).append("', ");
+        }
+
+        sb.append("number = ").append(dbPrintedMatter.getNumber()).append(" ");
+        sb.append("where id = ").append(dbPrintedMatter.getId()).append(";");
+
+        return sb.toString();
+    }
+
+    private String getOrderByParameter(SortParameter sortParameter, boolean isDesc) {
         String param = sortParameter.toString().toLowerCase();
         String direction = isDesc ? "desc" : "asc";
-        return  param + " " + direction;
+        return param + " " + direction;
     }
 
 }
