@@ -3,11 +3,9 @@ package ru.vsu.cs.newsstand.core.services;
 import ru.vsu.cs.newsstand.annotation.InjectByType;
 import ru.vsu.cs.newsstand.annotation.Singleton;
 import ru.vsu.cs.newsstand.core.dao.IPrintedMatterDataService;
-import ru.vsu.cs.newsstand.core.db.DataBase;
 import ru.vsu.cs.newsstand.core.db.domains.SortParameter;
 import ru.vsu.cs.newsstand.core.domain.*;
 import ru.vsu.cs.newsstand.core.services.data.EventLogServiceImpl;
-import ru.vsu.cs.newsstand.core.services.data.PrintedMatterDataServiceImp;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -25,6 +23,7 @@ public class Logics {
 
 
     public PrintedMatter createPrintedMatter(Integer count, PrintedMatter printedMatter) {
+        if(printedMatter == null) return null;
         PrintedMatter createdPrintedMatter = printedMatterDataService.add(printedMatter);
         for (int i = 1; i < count; i++) {
             printedMatterDataService.add(printedMatter.copy());
@@ -93,7 +92,8 @@ public class Logics {
         return printedMatterDataService.delete(id);
     }
 
-    public PrintedMatter updatePrintedMatter(Long id) {
-        return null;
+    public PrintedMatter updatePrintedMatter(PrintedMatter printedMatter) {
+        if(printedMatter == null) return null;
+        return printedMatterDataService.update(printedMatter);
     }
 }
